@@ -30,7 +30,7 @@
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/check/12345678/ammount/2",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/check/12345678/amount/12",
       "publishAllPorts": true
     }
   }

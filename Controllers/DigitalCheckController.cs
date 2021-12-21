@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CrediBank.Controllers
 {
@@ -22,19 +21,19 @@ namespace CrediBank.Controllers
             _apiBehavihourOptions = apiBehavihourOptions;
         }
 
-        [HttpGet("check/{accountId}/ammount/{ammountValue}")]
-        public IActionResult GetDigitalCheck(double accountId, float ammountValue)
+        [HttpGet("check/{accountId}/amount/{amountValue}")]
+        public IActionResult GetDigitalCheck(double accountId, float amountValue)
         {
-            _logger.LogInformation($"Request Recieved for new Digital Check for account: {accountId}, with ammount: {ammountValue}");
+            _logger.LogInformation($"Request Recieved for new Digital Check for account: {accountId}, with amount: {amountValue}");
             if (accountId.ToString().Length != 8)
             {
                 ModelState.AddModelError(nameof(accountId), "accountID must be an 8 digit number");
                 _logger.LogError($"accountId NOT VALID. \"{accountId}\" is not an 8 digit number");
             }
-            if (ammountValue <= 0)
+            if (amountValue <= 0)
             {
-                ModelState.AddModelError(nameof(ammountValue), "ammount must be a positive number");
-                _logger.LogError($"ammount NOT VALID. \"{ammountValue}\" is not a positive number");
+                ModelState.AddModelError(nameof(amountValue), "amount must be a positive number");
+                _logger.LogError($"amount NOT VALID. \"{amountValue}\" is not a positive number");
             }
             if (!ModelState.IsValid)
             {
@@ -47,22 +46,20 @@ namespace CrediBank.Controllers
                 builder.Append(RNG.Next(10).ToString());
             }
 
-            var now = DateTime.Now;
-
-            DigitalCheck check = new DigitalCheck
+            DigitalCheck check = new()
             {
                 CheckID = builder.ToString(),
-                Date = String.Format("{0:s}", now)
+                Date = String.Format("{0:s}", DateTime.Now)
             };
 
-            _logger.LogInformation($"Operation Sucessful. Returned Digital Check {check.CheckID}, for account {accountId} with value {ammountValue}");
+            _logger.LogInformation($"Operation Sucessful. Returned Digital Check {check.CheckID}, for account {accountId} with value {amountValue}");
             return Ok(check);
         }
 
         [HttpGet("/")]
         public IActionResult GetRoot()
         {
-            return Ok("Welcome to CrediBank REST API \n\nTo request a new Digital Check please use \".../check/{credit_account_id}/ammount/{value}\"");
+            return Ok("Welcome to CrediBank REST API \n\nTo request a new Digital Check please use \".../check/{credit_account_id}/amount/{value}\"");
         }
     }
 }
